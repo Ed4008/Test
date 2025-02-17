@@ -31,6 +31,17 @@
         </div>
     </section>
 
+<script>
+    const client = supabase.createClient(
+        'https://zziqvyaqorsuxxyruiwr.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6aXF2eWFxb3JzdXh4eXJ1aXdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3MDE2MTQsImV4cCI6MjA1NDI3NzYxNH0.fkcuUJp9uhxKdoGniDk3V0quSpwMZL2gr8GcxMXCYgQ'
+    );
+
+    client.auth.getUser().then(({ data: { user } }) => {
+        if (!user) window.location.href = 'index.html';
+    });
+</script>
+
     <script src="js/script.js"></script>
 </body>
 </html>
