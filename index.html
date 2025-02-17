@@ -1,61 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capacita Idosos</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacita Idosos</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Capacita Idosos</h1>
-    <nav>
-      <a href="#login">Login</a>
-      <a href="#cadastro">Cadastre-se</a>
-    </nav>
-  </header>
+    <header>
+        <h1>Capacita Idosos</h1>
+        <nav>
+            <a href="#login" class="nav-link">Login</a>
+            <a href="#cadastro" class="nav-link">Cadastre-se</a>
+        </nav>
+    </header>
 
-  <main>
-    <section id="bem-vindo">
-      <h2>Bem-vindo ao Capacita Idosos!</h2>
-      <p>Um espaço dedicado a ajudar idosos a utilizar a tecnologia de forma simples e eficiente.</p>
-    </section>
+    <main>
+        <!-- Seção Login -->
+        <section id="login" class="auth-section">
+            <h2>Login</h2>
+            <form id="form-login">
+                <input type="email" id="login-email" placeholder="E-mail" required>
+                <input type="password" id="login-senha" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+        </section>
 
-    <section id="login">
-      <h2>Login</h2>
-      <form id="form-login">
-        <input type="email" id="login-email" placeholder="E-mail" required>
-        <input type="password" id="login-senha" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
-      </form>
-    </section>
+        <!-- Seção Cadastro -->
+        <section id="cadastro" class="auth-section" style="display: none;">
+            <h2>Cadastre-se</h2>
+            <form id="form-cadastro">
+                <input type="text" id="nome" placeholder="Nome completo" required>
+                <input type="email" id="email" placeholder="E-mail válido" required>
+                <input type="password" id="senha" placeholder="Senha (mínimo 6 caracteres)" required>
+                <button type="submit">Criar Conta</button>
+            </form>
+        </section>
 
-    <section id="cadastro">
-      <h2>Cadastre-se</h2>
-      <form id="form-cadastro">
-        <input type="text" id="nome" placeholder="Nome" required>
-        <input type="email" id="email" placeholder="E-mail" required>
-        <input type="password" id="senha" placeholder="Senha" required>
-        <button type="submit">Cadastrar</button>
-      </form>
-    </section>
-  </main>
+        <p id="toggle-forms">
+            <span>Não tem conta? <a href="#cadastro" class="toggle-link">Cadastre-se</a></span>
+            <span>Já tem conta? <a href="#login" class="toggle-link">Fazer Login</a></span>
+        </p>
+    </main>
 
-  <footer>
-    <p>&copy; 2023 Capacita Idosos. Todos os direitos reservados.</p>
-  </footer>
+    <footer>
+        <p>&copy; 2024 Capacita Idosos. Todos os direitos reservados.</p>
+    </footer>
 
-  <!-- Supabase e script principal -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/script.js"></script>
-  <!-- Verifica se há sessão ativa e redireciona para cursos -->
-  <script>
-    (async function() {
-      const { data: { session } } = await client.auth.getSession();
-      if(session) {
-        window.location.href = 'cursos.html';
-      }
-    })();
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
