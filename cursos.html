@@ -1,61 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cursos - Capacita Idosos</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Capacita Idosos</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Verificação de autenticação logo no início -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    (async function() {
-      const { data: { session } } = await client.auth.getSession();
-      if(!session) {
-        window.location.href = 'index.html';
-      }
-    })();
-  </script>
+    <header>
+        <h1>Capacita Idosos</h1>
+        <nav>
+            <a href="index.html">Sair</a>
+            <a href="#cursos">Cursos</a>
+            <a href="#tutoriais">Tutoriais</a>
+        </nav>
+    </header>
+  
+    <script>
+        const client = supabase.createClient(
+            'https://zziqvyaqorsuxxyruiwr.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6aXF2eWFxb3JzdXh4eXJ1aXdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3MDE2MTQsImV4cCI6MjA1NDI3NzYxNH0.fkcuUJp9uhxKdoGniDk3V0quSpwMZL2gr8GcxMXCYgQ'
+        );
 
-  <header>
-    <h1>Capacita Idosos</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="#cursos">Cursos</a>
-      <a href="#tutoriais">Tutoriais</a>
-    </nav>
-  </header>
-
-  <section id="cursos">
-    <h2>Cursos Disponíveis</h2>
-    <div class="curso">
-      <h3>Como Criar e Gerenciar Arquivos</h3>
-      <p>Aprenda a criar, organizar e gerenciar arquivos e pastas no seu computador ou smartphone.</p>
-      <a href="curso-arquivos.html"><button>Começar Curso</button></a>
-    </div>
-    <div class="curso">
-      <h3>Como Criar uma Conta em Rede Social</h3>
-      <p>Descubra como criar contas no Facebook, Instagram e WhatsApp.</p>
-      <a href="curso-redes-sociais.html"><button>Começar Curso</button></a>
-    </div>
-    <div class="curso">
-      <h3>Como Utilizar o Teclado</h3>
-      <p>Aprenda a usar o teclado do computador ou smartphone de forma eficiente.</p>
-      <a href="curso-teclado.html"><button>Começar Curso</button></a>
-    </div>
-  </section>
-
-  <section id="tutoriais">
-    <h2>Tutoriais Rápidos</h2>
-    <div>
-      <h3>Como Compartilhar Fotos e Vídeos</h3>
-      <p>Passo a passo para compartilhar mídias em redes sociais.</p>
-      <h3>Teclas de Atalho</h3>
-      <p>Ctrl+C (Copiar), Ctrl+V (Colar), Ctrl+Z (Desfazer).</p>
-    </div>
-  </section>
-
-  <script src="js/script.js"></script>
+        client.auth.getUser().then(({ data: { user } }) => {
+            if (!user) window.location.href = 'index.html';
+        });
+    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
