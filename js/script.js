@@ -1,69 +1,95 @@
 const SUPABASE_URL = 'https://zziqvyaqorsuxxyruiwr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6aXF2eWFxb3JzdXh4eXJ1aXdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3MDE2MTQsImV4cCI6MjA1NDI3NzYxNH0.fkcuUJp9uhxKdoGniDk3V0quSpwMZL2gr8GcxMXCYgQ';
+
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Cadastro de usuário
-document.getElementById('form-cadastro').addEventListener('submit', async function(event) {
-  event.preventDefault();
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
+// Verificar autenticação inicial
+(async () => {
+    const { data: { user } } = await client.auth.getUser();
+    if (user) window.location.href = 'cursos.html';
+})();
 
-  try {
-    // Criar usuário no Supabase Auth
-    const { data: { user }, error: authError } = await client.auth.signUp({ 
-      email, 
-      password: senha 
+// Alternar entre formulários
+document.querySelectorAll('.toggle-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.auth-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.querySelector(e.target.getAttribute('href')).style.display = 'block';
     });
-
-    if (authError) {
-      throw new Error(authError.message || "Erro ao criar usuário na autenticação");
-    }
-
-    // Inserir dados na tabela 'usuarios'
-    const { data, error: dbError } = await client
-      .from('usuarios')
-      .insert([{ 
-        nome, 
-        email,
-        user_id: user.id 
-      }]);
-
-    if (dbError) {
-      throw new Error(dbError.message || "Erro ao salvar dados no banco");
-    }
-
-    alert('Cadastro realizado com sucesso!');
-    window.location.href = 'cursos.html';
-
-  } catch (error) {
-    console.error("Detalhes do erro:", error);
-    alert('Erro no cadastro: ' + (error.message || "Erro desconhecido"));
-  }
 });
 
-// Login de usuário
-document.getElementById('form-login').addEventListener('submit', async function(event) {
-  event.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const senha = document.getElementById('login-senha').value;
+// Cadastro
+document.getElementById('form-cadastro').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const userData = {
+        nome: document.getElementById('nome').value.trim(),
+        email: document.getElementById('email').value.trim().toLowerCase(),
+        senha: document.getElementById('senha').value
+    };
 
-  try {
-    // Realiza o login com Supabase Auth
-    const { data, error } = await client.auth.signInWithPassword({
-      email: email,
-      password: senha
-    });
+    try {
+        // Validar dados
+        if (!userData.nome || !userData.email || !userData.senha) {
+            throw new Error('Preencha todos os campos!');
+        }
+        if (userData.senha.length < 6) {
+            throw new Error('A senha deve ter pelo menos 6 caracteres!');
+        }
 
-    if(error) {
-      throw new Error(error.message || "Erro ao realizar login");
+        // Criar usuário
+        const { data: authData, error: authError } = await client.auth.signUp({
+            email: userData.email,
+            password: userData.senha
+        });
+
+        if (authError) throw authError;
+
+        // Salvar dados adicionais
+        const { error: dbError } = await client
+            .from('usuarios')
+            .insert([{
+                nome: userData.nome,
+                email: userData.email,
+                user_id: authData.user.id
+            }]);
+
+        if (dbError) throw dbError;
+
+        alert('Cadastro realizado com sucesso!');
+        window.location.href = 'cursos.html';
+    } catch (error) {
+        alert(`Erro: ${error.message}`);
+        console.error('Erro detalhado:', error);
     }
+});
 
-    alert('Login realizado com sucesso!');
-    window.location.href = 'cursos.html';
+// Login
+document.getElementById('form-login').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const credentials = {
+        email: document.getElementById('login-email').value.trim().toLowerCase(),
+        password: document.getElementById('login-senha').value
+    };
 
-  } catch (error) {
-    console.error("Detalhes do erro:", error);
-    alert('Erro no login: ' + (error.message || "Erro desconhecido"));
-  }
+    try {
+        const { data, error } = await client.auth.signInWithPassword(credentials);
+        
+        if (error) throw error;
+        
+        window.location.href = 'cursos.html';
+    } catch (error) {
+        alert(`Erro no login: ${error.message}`);
+        console.error('Erro detalhado:', error);
+    }
+});
+
+// Logout
+document.querySelector('a[href="index.html"]')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await client.auth.signOut();
+    window.location.href = 'index.html';
 });
